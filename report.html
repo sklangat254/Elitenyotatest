@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your CRB Report - Credit Score</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .report-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .report-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .report-header p {
+            opacity: 0.95;
+        }
+
+        .report-content {
+            padding: 40px 30px;
+        }
+
+        .credit-score-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #10b981;
+            position: relative;
+            z-index: 1;
+        }
+
+        .score-label {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .score-rating {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .info-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .loan-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .loan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .loan-title {
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .loan-status {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .loan-status.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .loan-status.cleared {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .loan-details {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .recommendations li {
+            padding: 10px 0;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        .recommendations li:before {
+            content: "💡 ";
+            margin-right: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .report-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .report-content {
+                padding: 30px 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+
+            .score-circle::before {
+                width: 120px;
+                height: 120px;
+            }
+
+            .score-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .actions, .btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="report-card">
+            <div class="report-header">
+                <h1>📊 Your CRB Credit Report</h1>
+                <p id="reportDate">Generated on: <span></span></p>
+            </div>
+
+            <div class="report-content">
+                <!-- Credit Score Section -->
+                <div class="credit-score-section">
+                    <div class="score-circle">
+                        <div class="score-number" id="creditScore">750</div>
+                    </div>
+                    <div class="score-label">Your Credit Score</div>
+                    <div class="score-rating" id="scoreRating">EXCELLENT</div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="info-section">
+                    <h2 class="section-title">👤 Personal Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value" id="userName">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">ID Number</div>
+                            <div class="info-value" id="userID">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value" id="userPhone">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Report Type</div>
+                            <div class="info-value" id="reportType">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Summary -->
+                <div class="info-section">
+                    <h2 class="section-title">💰 Credit Summary</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Total Active Loans</div>
+                            <div class="info-value">2</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Outstanding Balance</div>
+                            <div class="info-value">KES 45,000</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Total Cleared Loans</div>
+                            <div class="info-value">5</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Payment History</div>
+                            <div class="info-value">98% On-Time</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Loans -->
+                <div class="info-section">
+                    <h2 class="section-title">📋 Active Loan Accounts</h2>
+                    
+                    <div class="loan-item">
+                        <div class="loan-header">
+                            <div class="loan-title">Personal Loan - ABC Bank</div>
+                            <span class="loan-status active">ACTIVE</span>
+                        </div>
+                        <div class="loan-details">
+                            <strong>Loan Amount:</strong> KES 30,000<br>
+                            <strong>Outstanding:</strong> KES 25,000<br>
+                            <strong>Monthly Payment:</strong> KES 3,500<br>
+                            <strong>Start Date:</strong> Jan 2024<br>
+                            <strong>Status:</strong> Current (No arrears)
+                        </div>
+                    </div>
+
+                    <div class="loan-item">
+                        <div class="loan-header">
+                            <div class="loan-title">Mobile Loan - XYZ App</div>
+                            <span class="loan-status active">ACTIVE</span>
+                        </div>
+                        <div class="loan-details">
+                            <strong>Loan Amount:</strong> KES 20,000<br>
+                            <strong>Outstanding:</strong> KES 20,000<br>
+                            <strong>Monthly Payment:</strong> KES 5,000<br>
+                            <strong>Start Date:</strong> Nov 2024<br>
+                            <strong>Status:</strong> Current (No arrears)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="info-section">
+                    <h2 class="section-title">📅 Recent Credit Activity</h2>
+                    <div class="loan-item">
+                        <div class="loan-header">
+                            <div class="loan-title">Business Loan - DEF SACCO</div>
+                            <span class="loan-status cleared">CLEARED</span>
+                        </div>
+                        <div class="loan-details">
+                            <strong>Loan Amount:</strong> KES 50,000<br>
+                            <strong>Cleared Date:</strong> Oct 2024<br>
+                            <strong>Duration:</strong> 12 months<br>
+                            <strong>Status:</strong> Fully Paid
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations (Only for Standard/Premium) -->
+                <div class="info-section" id="recommendationsSection">
+                    <h2 class="section-title">💡 Credit Improvement Recommendations</h2>
+                    <div class="recommendations">
+                        <ul>
+                            <li>Continue making all loan payments on time to maintain your excellent score</li>
+                            <li>Your credit utilization is healthy at 45%. Keep it below 50%</li>
+                            <li>Consider diversifying your credit mix for better scoring</li>
+                            <li>Avoid applying for multiple loans simultaneously</li>
+                            <li>Review your credit report annually to catch any errors</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="window.print()">📄 Download PDF</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">🏠 Back to Home</button>
+                </div>
+            </div>
+
+            <div class="report-footer">
+                <p><strong>Disclaimer:</strong> This is a sample CRB report for demonstration purposes. Data shown is for testing only.</p>
+                <p>Report generated by CRB Status Checker • Secure & Confidential</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if payment was completed
+        const paymentCompleted = localStorage.getItem('crbPaymentCompleted');
+        if (!paymentCompleted) {
+            alert('Please complete payment first');
+            window.location.href = 'select-report.html';
+        }
+
+        // Load user data
+        const userDataStr = localStorage.getItem('crbUserData');
+        const reportSelectionStr = localStorage.getItem('crbReportSelection');
+
+        if (userDataStr && reportSelectionStr) {
+            const userData = JSON.parse(userDataStr);
+            const reportSelection = JSON.parse(reportSelectionStr);
+
+            // Display user info
+            document.getElementById('userName').textContent = userData.fullName;
+            document.getElementById('userID').textContent = userData.idNumber;
+            document.getElementById('userPhone').textContent = userData.phoneNumber;
+            document.getElementById('reportType').textContent = reportSelection.reportType.charAt(0).toUpperCase() + reportSelection.reportType.slice(1) + ' Report';
+
+            // Set report date
+            const now = new Date();
+            document.querySelector('#reportDate span').textContent = now.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Generate random credit score (for demo)
+            const creditScore = Math.floor(Math.random() * (850 - 600 + 1)) + 600;
+            document.getElementById('creditScore').textContent = creditScore;
+
+            // Determine rating
+            let rating = '';
+            if (creditScore >= 800) rating = 'EXCELLENT';
+            else if (creditScore >= 700) rating = 'GOOD';
+            else if (creditScore >= 650) rating = 'FAIR';
+            else rating = 'POOR';
+
+            document.getElementById('scoreRating').textContent = rating;
+
+            // Update score circle color based on rating
+            const scoreCircle = document.querySelector('.score-circle');
+            const scoreNumber = document.querySelector('.score-number');
+            const scoreRatingEl = document.getElementById('scoreRating');
+
+            if (rating === 'EXCELLENT') {
+                scoreCircle.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                scoreNumber.style.color = '#10b981';
+                scoreRatingEl.style.background = '#10b981';
+            } else if (rating === 'GOOD') {
+                scoreCircle.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+                scoreNumber.style.color = '#3b82f6';
+                scoreRatingEl.style.background = '#3b82f6';
+            } else if (rating === 'FAIR') {
+                scoreCircle.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                scoreNumber.style.color = '#f59e0b';
+                scoreRatingEl.style.background = '#f59e0b';
+            } else {
+                scoreCircle.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                scoreNumber.style.color = '#ef4444';
+                scoreRatingEl.style.background = '#ef4444';
+            }
+
+            // Hide recommendations for basic report
+            if (reportSelection.reportType === 'basic') {
+                document.getElementById('recommendationsSection').style.display = 'none';
+            }
+        }
+
+        // Clear payment completion flag after viewing
+        // Uncomment if you want to require payment for each view
+        // localStorage.removeItem('crbPaymentCompleted');
+    </script>
+</body>
+</html>

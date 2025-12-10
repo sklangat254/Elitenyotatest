@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Details - CRB Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 1rem;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .info-box {
+            background: #f0f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Enter Your Details</h1>
+            <p>We need this information to check your CRB status</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <p><strong>🔒 Your information is secure.</strong> We use bank-level encryption to protect your data.</p>
+            </div>
+
+            <form id="detailsForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        placeholder="Enter your full name as per ID"
+                        required
+                        minlength="3"
+                    >
+                    <p class="note">Use your official name as it appears on your ID</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="idNumber">ID Number *</label>
+                    <input 
+                        type="text" 
+                        id="idNumber" 
+                        name="idNumber" 
+                        placeholder="e.g., 12345678"
+                        required
+                        pattern="[0-9]{7,8}"
+                        maxlength="8"
+                    >
+                    <p class="note">Enter your National ID or Passport number</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number (M-Pesa) *</label>
+                    <input 
+                        type="tel" 
+                        id="phoneNumber" 
+                        name="phoneNumber" 
+                        placeholder="0712345678"
+                        required
+                        pattern="^(07|01)[0-9]{8}$"
+                    >
+                    <p class="note">Enter M-Pesa registered number (07XX or 01XX)</p>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Submit & Check Status
+                </button>
+            </form>
+
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('detailsForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const fullName = document.getElementById('fullName').value.trim();
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+            // Validate
+            if (!fullName || !idNumber || !phoneNumber) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Validate ID number (7-8 digits)
+            if (!/^[0-9]{7,8}$/.test(idNumber)) {
+                alert('Please enter a valid ID number (7-8 digits)');
+                return;
+            }
+
+            // Validate phone number
+            if (!/^(07|01)[0-9]{8}$/.test(phoneNumber)) {
+                alert('Please enter a valid phone number (07XX or 01XX)');
+                return;
+            }
+
+            // Store data in localStorage
+            const userData = {
+                fullName: fullName,
+                idNumber: idNumber,
+                phoneNumber: phoneNumber,
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('crbUserData', JSON.stringify(userData));
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            // Redirect to checking page
+            setTimeout(() => {
+                window.location.href = 'checking.html';
+            }, 500);
+        });
+
+        // Auto-format phone number
+        const phoneInput = document.getElementById('phoneNumber');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Limit to 10 digits
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            e.target.value = value;
+        });
+
+        // Only allow numbers in ID field
+        const idInput = document.getElementById('idNumber');
+        idInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>

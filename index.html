@@ -3,605 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASTER Payment SYSTEM</title>
+    <title>CRB Status Checker - Check Your Credit Score</title>
     <style>
-        :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --primary-light: #d1fae5;
-            --secondary: #8b5cf6;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-        }
-        
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-            color: var(--gray-800);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
-        
+
         .container {
+            max-width: 900px;
             width: 100%;
-            max-width: 480px;
-            margin: 1rem;
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            animation: slideUp 0.6s ease-out;
         }
-        
-        .header {
-            background-color: var(--primary);
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 1.5rem;
+            padding: 60px 40px;
             text-align: center;
         }
-        
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .header p {
-            opacity: 0.9;
-            font-size: 0.875rem;
-        }
-        
-        .content {
-            padding: 1.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--gray-700);
-        }
-        
-        input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--gray-300);
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-        
-        button {
-            width: 100%;
-            padding: 0.875rem 1.5rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        
-        button:disabled {
-            background-color: var(--gray-300);
-            color: var(--gray-500);
-            cursor: not-allowed;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover:not(:disabled) {
-            background-color: var(--primary-dark);
-        }
-        
-        .btn-secondary {
-            background-color: var(--gray-100);
-            color: var(--gray-700);
-        }
-        
-        .btn-secondary:hover:not(:disabled) {
-            background-color: var(--gray-200);
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--gray-300);
-            color: var(--gray-700);
-        }
-        
-        .btn-outline:hover:not(:disabled) {
-            background-color: var(--gray-50);
-        }
-        
-        .response-area {
-            margin-top: 1rem;
-            padding: 1rem;
-            border: 1px solid var(--gray-200);
-            background-color: var(--gray-50);
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            border-radius: 0.5rem;
-            font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace;
-            font-size: 0.875rem;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .note {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-            margin-top: 0.5rem;
-            line-height: 1.4;
-        }
-        
-        .step {
-            padding-top: 1.5rem;
-            margin-top: 1.5rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+
+        .hero h1 {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
+            font-weight: 800;
         }
-        
-        .status-pending {
-            background-color: #fef3c7;
-            color: #92400e;
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            line-height: 1.6;
         }
-        
-        .status-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-error {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-        
-        .loading-spinner {
+
+        .cta-button {
             display: inline-block;
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .progress-bar {
-            height: 4px;
-            background-color: var(--gray-200);
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background-color: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .success-checkmark {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            background-color: var(--success);
-            color: white;
-            font-size: 1.5rem;
+            margin: 0 auto 20px;
+            font-size: 2rem;
         }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+
+        .feature h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
         }
-        
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+
+        .feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .info-section {
+            background: #f0f4f8;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .info-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            padding: 10px 0;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-section li:last-child {
+            border-bottom: none;
+        }
+
+        .info-section li:before {
+            content: "✓ ";
+            color: #667eea;
             font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .bottom-cta {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <div class="logo-icon">M</div>
-                <h1>MASTER Payment SYSTEM</h1>
-            </div>
+        <div class="hero">
+            <h1>🔒 CRB Status Checker</h1>
+            <p>Check your credit score instantly and securely</p>
+            <a href="details.html" class="cta-button">Get Started →</a>
         </div>
-        
+
         <div class="content">
-            <!-- Step 1: Payment Details -->
-            <div id="step-1">
-                <form id="paymentForm">
-                    <div class="form-group">
-                        <label for="payPhone">Phone Number</label>
-                        <input type="tel" id="payPhone" placeholder="e.g., 0712345678" required>
-                        <p class="note">Enter your phone number in the format 07XXXXXXXX or 01XXXXXXXX</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="amount">Amount (KES)</label>
-                        <input type="number" id="amount" min="1" value="1" required>
-                    </div>
-                    <button type="submit" id="pay-payhero-btn" class="btn-primary">
-                        <span>Pay with PayHero</span>
-                    </button>
-                    <p id="payNote" class="note"></p>
-                </form>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Results</h3>
+                    <p>Get your credit report in seconds. No waiting, no delays.</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🔐</div>
+                    <h3>100% Secure</h3>
+                    <p>Your data is encrypted and protected with bank-level security.</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Detailed Reports</h3>
+                    <p>Choose from 3 report types based on your needs.</p>
+                </div>
             </div>
 
-            <!-- Step 2: Verification -->
-            <div id="step-2" class="step hidden">
-                <h2>Verify Payment</h2>
-                <div class="status-indicator status-pending">
-                    <span>Payment initiated</span>
-                </div>
-                <p class="note">A prompt has been sent to your phone. Please complete it, then click Verify.</p>
-                
-                <div class="form-group">
-                    <label>Payment Reference:</label>
-                    <div id="payRef" class="response-area"></div>
-                </div>
-                
-                <div class="progress-bar">
-                    <div id="progressFill" class="progress-fill"></div>
-                </div>
-                
-                <button id="verify-payhero-btn" class="btn-primary">
-                    <span>Verify Payment</span>
-                </button>
-                <p id="verifyMsg" class="note"></p>
-                
-                <button id="retryBtn" class="btn-outline" style="margin-top: 1rem;">
-                    Try a Different Payment
-                </button>
+            <div class="info-section">
+                <h2>Why Check Your CRB Status?</h2>
+                <ul>
+                    <li>Know your creditworthiness before applying for loans</li>
+                    <li>Identify and correct errors in your credit history</li>
+                    <li>Improve your credit score over time</li>
+                    <li>Qualify for better interest rates and loan terms</li>
+                    <li>Avoid loan application rejections</li>
+                </ul>
             </div>
-            
-            <!-- Step 3: Final Status -->
-            <div id="step-3" class="step hidden">
-                <h2>Payment Complete</h2>
-                <div id="loadingBlock" class="hidden">
-                    <div class="status-indicator status-pending">
-                        <div class="loading-spinner"></div>
-                        <span>Finalizing payment...</span>
-                    </div>
-                </div>
-                <div id="finalBlock" class="hidden">
-                    <div class="success-checkmark">✓</div>
-                    <div class="status-indicator status-success">
-                        <span>Success! The payment is complete.</span>
-                    </div>
-                    <button id="newPaymentBtn" class="btn-primary" style="margin-top: 1.5rem;">
-                        Start New Payment
-                    </button>
-                </div>
+
+            <div class="info-section" style="margin-top: 20px;">
+                <h2>How It Works</h2>
+                <ul>
+                    <li>Enter your personal details (Name, ID, Phone Number)</li>
+                    <li>We check your CRB status with authorized bureaus</li>
+                    <li>Choose your preferred report type (Basic, Standard, or Premium)</li>
+                    <li>Pay securely via M-Pesa</li>
+                    <li>Receive your detailed credit report instantly</li>
+                </ul>
+            </div>
+
+            <div class="bottom-cta">
+                <a href="details.html" class="cta-button">Check Your Credit Score Now →</a>
             </div>
         </div>
     </div>
-
-    <script>
-        const state = {
-            paymentRef: null,
-            provider: 'payhero',
-            verificationAttempts: 0
-        };
-
-        const apiConfig = {
-            payhero: {
-                stk: 'https://api.payhero.stkpush.co.ke/payments/stk-push/',
-                verify: 'https://api.payhero.stkpush.co.ke/payments/verify-payment/'
-            }
-        };
-
-       
-        const payPhoneInput = document.getElementById('payPhone');
-        const amountInput = document.getElementById('amount');
-        const payNoteEl = document.getElementById('payNote');
-        const payPayheroBtn = document.getElementById('pay-payhero-btn');
-        const verifyPayheroBtn = document.getElementById('verify-payhero-btn');
-        const retryBtn = document.getElementById('retryBtn');
-        const newPaymentBtn = document.getElementById('newPaymentBtn');
-        const payRefEl = document.getElementById('payRef');
-        const verifyMsgEl = document.getElementById('verifyMsg');
-        const progressFill = document.getElementById('progressFill');
-
-        document.getElementById('paymentForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            handlePayment();
-        });
-
-        verifyPayheroBtn.addEventListener('click', handleVerification);
-        retryBtn.addEventListener('click', () => setStepActive(1));
-        newPaymentBtn.addEventListener('click', () => setStepActive(1));
-
-        // -------------------------
-        // Core Logic Functions
-        // -------------------------
-        async function handlePayment() {
-            const phoneNumber = normalizePhone(payPhoneInput.value.trim());
-            if (!phoneNumber) {
-                showError('Invalid Phone Number. Use either 07... or 01...');
-                return;
-            }
-            
-            const amountToPay = amountInput.value;
-            if (!amountToPay || amountToPay < 1) {
-                showError('Please enter a valid amount (minimum 1 KES)');
-                return;
-            }
-            
-            const reference = `TEST-${Date.now()}`;
-
-            togglePayButton(true);
-            setPayNote('Sending STK push… Please check your phone.');
-
-            try {
-                const payRef = await makePayment(phoneNumber, amountToPay, reference);
-                if (!payRef) throw new Error('Missing payment reference from API.');
-                
-                state.paymentRef = payRef;
-                payRefEl.textContent = payRef;
-                setPayNote('Prompt sent. Complete on your phone, then click Verify.');
-                
-                animateProgress();
-                
-                setStepActive(2);
-            } catch (err) {
-                console.error(err);
-                showError(`Payment Failed: ${err.message}`);
-                setPayNote('');
-            } finally {
-                togglePayButton(false);
-            }
-        }
-
-        async function handleVerification() {
-            if (!state.paymentRef) {
-                showError('Payment Reference Missing. Please try paying again.');
-                return;
-            }
-            
-            state.verificationAttempts++;
-            setVerifyMsg('Checking payment status…');
-            toggleVerifyButton(true);
-
-            try {
-                const isSuccess = await checkPaymentStatus(state.paymentRef);
-                if (isSuccess) {
-                    setVerifyMsg('Payment confirmed. Finalizing…', 'success');
-                    document.getElementById('loadingBlock').classList.remove('hidden');
-                    
-
-                    setTimeout(() => {
-                        document.getElementById('loadingBlock').classList.add('hidden');
-                        document.getElementById('finalBlock').classList.remove('hidden');
-                        setStepActive(3);
-                    }, 2000);
-                } else {
-                    if (state.verificationAttempts < 5) {
-                        setVerifyMsg(`Payment not found or not completed. Attempt ${state.verificationAttempts}/5.`, 'warning');
-              
-                        setTimeout(handleVerification, 3000);
-                    } else {
-                        setVerifyMsg('Payment verification failed after multiple attempts. Please try again.', 'error');
-                        toggleVerifyButton(false);
-                    }
-                }
-            } catch (e) {
-                console.error(e);
-                setVerifyMsg(`Verification failed: ${e.message}`, 'error');
-                toggleVerifyButton(false);
-            }
-        }
-
-        // -------------------------
-        //  hapa ni main point 
-        // -------------------------
-        async function makePayment(phoneNumber, amount, reference) {
-            const url = apiConfig.payhero.stk;
-            console.log(`🚀 [PayHero] Initiating payment to ${url} with:`, { phoneNumber, amount, reference });
-
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json', 
-                    'Accept': 'application/json' 
-                },
-                body: JSON.stringify({
-                    phone_number: phoneNumber,
-                    amount: amount,
-                    reference: reference,
-                    platform: 'HK93V1', 
-                    account_id: '4596' //hapa utaeka account ID 
-                })
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.log(`❌ [PayHero] STK Push HTTP error:`, response.status, response.statusText, errorText);
-                throw new Error(`HTTP error ${response.status}: ${errorText}`);
-            }
-
-            const data = await response.json();
-            console.log(`📨 [PayHero] STK Push Response JSON:`, data);
-
-            const ref = data?.transaction_id || data?.checkout_request_id || data?.reference || data?.merchant_request_id || null;
-            if (!ref) console.warn(`[PayHero] Could not find a payment reference in the response.`);
-            
-            return ref;
-        }
-
-        async function checkPaymentStatus(paymentReference) {
-            const url = `${apiConfig.payhero.verify}${encodeURIComponent(paymentReference)}/`;
-            console.log(`🔍 [PayHero] Checking payment status at ${url}`);
-
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: { 'Accept': 'application/json' },
-            });
-            
-            console.log(`📡 [PayHero] Payment Status Check Response:`, response);
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`❌ [PayHero] Verify Status HTTP error:`, response.status, errorText);
-                throw new Error(`HTTP error ${response.status}: ${errorText}`);
-            }
-
-            const data = await response.json();
-            console.log(`📋 [PayHero] Payment Status Data:`, data);
-
-            const status = (data?.status || data?.data?.status || '').toString().toLowerCase();
-            console.log(`[PayHero] Parsed status:`, status);
-
-            return ['completed', 'confirmed', 'success'].includes(status);
-        }
-        // -------------------------
-        //main points zimeishia hapa
-        // -------------------------
-
-
-        function setStepActive(stepNum) {
-            document.getElementById('step-1').classList.toggle('hidden', stepNum !== 1);
-            document.getElementById('step-2').classList.toggle('hidden', stepNum !== 2);
-            document.getElementById('step-3').classList.toggle('hidden', stepNum !== 3);
-            
-            if (stepNum === 1) { 
-                state.paymentRef = null;
-                state.verificationAttempts = 0;
-                setPayNote('');
-                setVerifyMsg('');
-                toggleVerifyButton(false);
-                document.getElementById('finalBlock').classList.add('hidden');
-                progressFill.style.width = '0%';
-            }
-        }
-
-        function togglePayButton(loading) {
-            payPayheroBtn.disabled = loading;
-            if (loading) {
-                payPayheroBtn.innerHTML = '<div class="loading-spinner"></div><span>Processing…</span>';
-            } else {
-                payPayheroBtn.innerHTML = '<span>Pay with PayHero</span>';
-            }
-        }
-        
-        function toggleVerifyButton(loading) {
-            verifyPayheroBtn.disabled = loading;
-            if (loading) {
-                verifyPayheroBtn.innerHTML = '<div class="loading-spinner"></div><span>Checking…</span>';
-            } else {
-                verifyPayheroBtn.innerHTML = '<span>Verify Payment</span>';
-            }
-        }
-
-        function setPayNote(msg) {
-            payNoteEl.textContent = msg || '';
-        }
-        
-        function setVerifyMsg(msg, type = 'info') {
-            verifyMsgEl.textContent = msg;
-            if (type === 'success') {
-                verifyMsgEl.style.color = 'var(--success)';
-            } else if (type === 'error') {
-                verifyMsgEl.style.color = 'var(--error)';
-            } else if (type === 'warning') {
-                verifyMsgEl.style.color = 'var(--warning)';
-            } else {
-                verifyMsgEl.style.color = 'var(--gray-500)';
-            }
-        }
-        
-        function showError(message) {
-            alert(message);
-        }
-
-        function normalizePhone(input) {
-            const digits = input.replace(/\D/g, '');
-            if (digits.startsWith('254') && digits.length === 12) return digits;
-            if (digits.startsWith('07') && digits.length === 10) return '254' + digits.slice(1);
-            if (digits.startsWith('01') && digits.length === 10) return '254' + digits.slice(1);
-            return null;
-        }
-        
-        function animateProgress() {
-            let width = 0;
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                } else {
-                    width += 1;
-                    progressFill.style.width = width + '%';
-                }
-            }, 50);
-        }
-    </script>
 </body>
 </html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checking CRB Status - Please Wait</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Modal/Popup Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .modal-icon.success {
+            background: #10b981;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .modal-text {
+            color: #666;
+            font-size: 1.05rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .progress-container {
+            margin: 30px 0;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-left: 4px solid #667eea;
+        }
+
+        .progress-step.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .step-status {
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .proceed-btn {
+            display: none;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+        }
+
+        .proceed-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .proceed-btn.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon">
+                🔍
+            </div>
+            <h2 class="modal-title" id="modalTitle">Checking CRB Status</h2>
+            <p class="modal-text" id="modalText">Please wait while we retrieve your credit information from authorized bureaus...</p>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-step" id="step1">
+                    <span class="step-text">Verifying your details</span>
+                    <span class="step-status"><div class="spinner"></div></span>
+                </div>
+                <div class="progress-step" id="step2">
+                    <span class="step-text">Contacting CRB bureaus</span>
+                    <span class="step-status">⏳</span>
+                </div>
+                <div class="progress-step" id="step3">
+                    <span class="step-text">Retrieving credit history</span>
+                    <span class="step-status">⏳</span>
+                </div>
+                <div class="progress-step" id="step4">
+                    <span class="step-text">Analyzing your credit score</span>
+                    <span class="step-status">⏳</span>
+                </div>
+                <div class="progress-step" id="step5">
+                    <span class="step-text">Preparing your report</span>
+                    <span class="step-status">⏳</span>
+                </div>
+            </div>
+
+            <button class="proceed-btn" id="proceedBtn" onclick="proceedToReports()">
+                Proceed to Check Credit Score →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Check if user data exists
+        const userData = localStorage.getItem('crbUserData');
+        if (!userData) {
+            // Redirect back to details page if no data
+            window.location.href = 'details.html';
+        }
+
+        const steps = [
+            { id: 'step1', duration: 1500 },
+            { id: 'step2', duration: 2000 },
+            { id: 'step3', duration: 2500 },
+            { id: 'step4', duration: 2000 },
+            { id: 'step5', duration: 1500 }
+        ];
+
+        let currentStep = 0;
+
+        function completeStep(stepId) {
+            const stepElement = document.getElementById(stepId);
+            stepElement.classList.remove('active');
+            stepElement.classList.add('completed');
+            stepElement.querySelector('.step-status').innerHTML = '✓';
+        }
+
+        function activateStep(stepId) {
+            const stepElement = document.getElementById(stepId);
+            stepElement.classList.add('active');
+            stepElement.querySelector('.step-status').innerHTML = '<div class="spinner"></div>';
+        }
+
+        function processSteps() {
+            if (currentStep >= steps.length) {
+                // All steps completed
+                showCompletionScreen();
+                return;
+            }
+
+            const step = steps[currentStep];
+            activateStep(step.id);
+
+            setTimeout(() => {
+                completeStep(step.id);
+                currentStep++;
+                processSteps();
+            }, step.duration);
+        }
+
+        function showCompletionScreen() {
+            // Update icon
+            const modalIcon = document.getElementById('modalIcon');
+            modalIcon.classList.add('success');
+            modalIcon.textContent = '✓';
+
+            // Update title and text
+            document.getElementById('modalTitle').textContent = 'CRB Check Complete!';
+            document.getElementById('modalText').textContent = 'Your credit information has been retrieved successfully. Choose your preferred report type to continue.';
+
+            // Show proceed button
+            document.getElementById('proceedBtn').classList.add('show');
+        }
+
+        function proceedToReports() {
+            window.location.href = 'select-report.html';
+        }
+
+        // Start the checking process
+        setTimeout(() => {
+            processSteps();
+        }, 500);
+    </script>
+</body>
+</html>
